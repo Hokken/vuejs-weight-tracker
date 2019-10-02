@@ -1,8 +1,10 @@
+
+const express = require('express');
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
-export default (app, http) => {
+const app = express();
 
   app.use(
     bodyParser.urlencoded({
@@ -84,5 +86,8 @@ export default (app, http) => {
       });
     }
   });
-}
+
+const port = process.env.PORT || 3000;
+app.listen(port);
+console.log('api runnging on port ' + 3000 + ': ');
 
