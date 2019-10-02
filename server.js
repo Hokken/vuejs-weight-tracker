@@ -1,3 +1,4 @@
+const serverConfig = require("./server.config");
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -16,6 +17,14 @@ app.use(
 );
 
 app.use(cors());
+app.use(bodyParser.json());
+
+mongoose
+  .connect(
+    serverConfig.mongoUrl,
+    { useNewUrlParser: true, useUnifiedTopology: true }
+  )
+  .catch(error => console.log(error));
 
 let Schema = mongoose.Schema;
 let recordSchema = new Schema({
@@ -26,16 +35,7 @@ let recordSchema = new Schema({
 
 let Record = mongoose.model("Record", recordSchema);
 
-app.use(bodyParser.json());
-
 app.post("/api/get", (req, res) => {
-  mongoose
-    .connect(
-      "mongodb+srv://calwen:calwen@cluster0-uq0qw.mongodb.net/weight-tracker?retryWrites=true&w=majority",
-      { useNewUrlParser: true, useUnifiedTopology: true }
-    )
-    .catch(error => console.log(error));
-
   Record.find({}, (err, docs) => {
     if (err) {
       res.send(err);
@@ -59,12 +59,6 @@ app.post("/api/delete", (req, res) => {
 });
 
 app.post("/api/update", (req, res) => {
-  mongoose
-    .connect(
-      "mongodb+srv://calwen:calwen@cluster0-uq0qw.mongodb.net/weight-tracker?retryWrites=true&w=majority",
-      { useNewUrlParser: true, useUnifiedTopology: true }
-    )
-    .catch(error => console.log(error));
   Record.updateOne(
     { _id: req.body.id },
     { date: req.body.date, weight: req.body.weight, notes: req.body.notes },
@@ -75,17 +69,10 @@ app.post("/api/update", (req, res) => {
 });
 
 app.post("/api/save", (req, res) => {
-  mongoose
-    .connect(
-      "mongodb+srv://calwen:calwen@cluster0-uq0qw.mongodb.net/weight-tracker?retryWrites=true&w=majority",
-      { useNewUrlParser: true, useUnifiedTopology: true }
-    )
-    .catch(error => console.log(error));
   if (!req.body.id) {
     let record = Record(req.body);
     record.save(() => {
       res.send("record saved");
-      mongoose.connection.close();
     });
   }
 });
