@@ -1,93 +1,95 @@
-
-const express = require('express');
+const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const serveStatic = require("serve-static");
+const path = require("path");
 
 const app = express();
 
-  app.use(
-    bodyParser.urlencoded({
-      extended: true
-    })
-  );
+app.use(serveStatic(path.join(__dirname, "dist")));
 
-  app.use(cors());
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+);
 
-  let Schema = mongoose.Schema;
-  let recordSchema = new Schema({
-    date: String,
-    weight: String,
-    notes: String
-  });
+app.use(cors());
 
-  let Record = mongoose.model("Record", recordSchema);
+let Schema = mongoose.Schema;
+let recordSchema = new Schema({
+  date: String,
+  weight: String,
+  notes: String
+});
 
-  app.use(bodyParser.json());
+let Record = mongoose.model("Record", recordSchema);
 
-  app.post("/api/get", (req, res) => {
-    mongoose
-      .connect(
-        "mongodb+srv://calwen:calwen@cluster0-uq0qw.mongodb.net/weight-tracker?retryWrites=true&w=majority",
-        { useNewUrlParser: true, useUnifiedTopology: true }
-      )
-      .catch(error => console.log(error));
+app.use(bodyParser.json());
 
-    Record.find({}, (err, docs) => {
-      if (err) {
-        res.send(err);
-      } else {
-        res.send(docs);
-      }
-    });
-  });
+app.post("/api/get", (req, res) => {
+  mongoose
+    .connect(
+      "mongodb+srv://calwen:calwen@cluster0-uq0qw.mongodb.net/weight-tracker?retryWrites=true&w=majority",
+      { useNewUrlParser: true, useUnifiedTopology: true }
+    )
+    .catch(error => console.log(error));
 
-  app.post("/api/delete", (req, res) => {
-    if (req.body.id) {
-     Record.deleteOne({ _id: req.body.id }, err => {
-        if (err) return handleError(err);
-        res.send("record deleted");
-      });
+  Record.find({}, (err, docs) => {
+    if (err) {
+      res.send(err);
     } else {
-     Record.deleteMany({}, () => {
+      res.send(docs);
+    }
+  });
+});
+
+app.post("/api/delete", (req, res) => {
+  if (req.body.id) {
+    Record.deleteOne({ _id: req.body.id }, err => {
+      if (err) return handleError(err);
+      res.send("record deleted");
+    });
+  } else {
+    Record.deleteMany({}, () => {
       res.send("all data deleted");
-     });
-    }
-  });
+    });
+  }
+});
 
-  app.post("/api/update", (req, res) => {
-    mongoose
-      .connect(
-        "mongodb+srv://calwen:calwen@cluster0-uq0qw.mongodb.net/weight-tracker?retryWrites=true&w=majority",
-        { useNewUrlParser: true, useUnifiedTopology: true }
-      )
-      .catch(error => console.log(error));
-    Record.updateOne(
-      { _id: req.body.id },
-      { date: req.body.date, weight: req.body.weight, notes: req.body.notes },
-      () => {
-        res.send("record updated");
-      }
-    );
-  });
-
-  app.post("/api/save", (req, res) => {
-    mongoose
-      .connect(
-        "mongodb+srv://calwen:calwen@cluster0-uq0qw.mongodb.net/weight-tracker?retryWrites=true&w=majority",
-        { useNewUrlParser: true, useUnifiedTopology: true }
-      )
-      .catch(error => console.log(error));
-    if (!req.body.id) {
-      let record = Record(req.body);
-      record.save(() => {
-        res.send("record saved");
-        mongoose.connection.close();
-      });
+app.post("/api/update", (req, res) => {
+  mongoose
+    .connect(
+      "mongodb+srv://calwen:calwen@cluster0-uq0qw.mongodb.net/weight-tracker?retryWrites=true&w=majority",
+      { useNewUrlParser: true, useUnifiedTopology: true }
+    )
+    .catch(error => console.log(error));
+  Record.updateOne(
+    { _id: req.body.id },
+    { date: req.body.date, weight: req.body.weight, notes: req.body.notes },
+    () => {
+      res.send("record updated");
     }
-  });
+  );
+});
+
+app.post("/api/save", (req, res) => {
+  mongoose
+    .connect(
+      "mongodb+srv://calwen:calwen@cluster0-uq0qw.mongodb.net/weight-tracker?retryWrites=true&w=majority",
+      { useNewUrlParser: true, useUnifiedTopology: true }
+    )
+    .catch(error => console.log(error));
+  if (!req.body.id) {
+    let record = Record(req.body);
+    record.save(() => {
+      res.send("record saved");
+      mongoose.connection.close();
+    });
+  }
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port);
-console.log('api runnging on port ' + 3000 + ': ');
-
+console.log("api running on port " + 3000 + ": ");
