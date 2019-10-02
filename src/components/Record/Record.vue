@@ -1,6 +1,6 @@
 <template>
   <transition appear name="fade">
-    <div class="card bg-light mb-3" style="max-width: 28rem;">
+    <div class="card mb-3 card-bg" ref="card" style="max-width: 28rem;">
       <div class="card-body">
         <h5 class="card-title">Add a Record</h5>
         <form>
@@ -39,7 +39,7 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import { TweenLite } from 'gsap/all';
+import { TweenMax, Sine } from 'gsap/all';
 export default {
   data: () => {
     return {
@@ -60,7 +60,7 @@ export default {
       return new Date().toDateString();
     }
   },
-  mounted() {
+  mounted() {    
     this.pweight = this.weight;
     this.pnotes = this.notes;
     this.pmode = this.mode;
@@ -114,6 +114,7 @@ export default {
     saveRecord() {
       if (this.pnotes === "" || this.pweight === "") {
         this.error = "Please fill up all the fields";
+        TweenMax.to(this.$refs.card, .3, { backgroundColor: '#ffa3a3', repeat: 1, yoyo:true, ease: Sine.easeOut});
         return;
       }
       this.error = "";
@@ -125,6 +126,7 @@ export default {
         })
         .then(resp => {
           console.log(resp);         
+          TweenMax.to(this.$refs.card, .3, { backgroundColor: '#a8e6ad', repeat: 1, yoyo:true, ease: Sine.easeOut});
         })
         .catch(err => {
           console.log(err);
@@ -141,6 +143,9 @@ export default {
 input,
 textarea {
   font-size: 0.9rem;
+}
+.card-bg {
+  background-color: rgb(247, 247, 247)
 }
 button + button {
   margin-left: 5px;
