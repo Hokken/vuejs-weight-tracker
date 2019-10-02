@@ -1,7 +1,5 @@
 <template>
-  <transition appear name="fade"
-    @before-enter="beforeEnter()"
-    >
+  <transition appear name="fade">
     <div class="card bg-light mb-3" style="max-width: 28rem;">
       <div class="card-body">
         <h5 class="card-title">Add a Record</h5>
