@@ -10,7 +10,7 @@
     "express:run": "vue-cli-service express:run",
     "test:unit": "vue-cli-service test:unit",
     "postinstall": "if test \"$NODE_ENV\" = \"production\" ; then npm run build ; fi ",
-    "start": "node srv/index.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "axios": "^0.19.0",
