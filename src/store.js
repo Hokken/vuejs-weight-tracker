@@ -6,6 +6,8 @@ Vue.use(Vuex);
 
 const apiUrl = "/api";
 
+console.log(process.env)
+
 export default new Vuex.Store({
   state: {
     records: [],
