@@ -5,6 +5,7 @@ const cors = require("cors");
 export default (app, http) => {
 
   const port = process.env.PORT || 80;
+  app.listen(port);
 
   app.use(
     bodyParser.urlencoded({
