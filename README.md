@@ -5,7 +5,7 @@
 npm install
 ```
 
-### run dev server
+### Run dev server
 ```
 node server.js
 ```
