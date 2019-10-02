@@ -5,6 +5,11 @@
 npm install
 ```
 
+### run dev server
+```
+node server.js
+```
+
 ### Compiles and hot-reloads for development
 ```
 npm run serve
