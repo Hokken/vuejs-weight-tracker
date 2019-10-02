@@ -35,8 +35,9 @@ npm run lint
 ```
 npm run test:unit
 ```
-
+---
 ### Make sure to set your MongoDB url in server.config.js.dummy first and to rename the file server.config.js so it can be read by the server
+---
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
