@@ -1,5 +1,7 @@
 # weight-tracker
 
+Just a little demo project using VueJS, Bootstrap, Express and MongoDB
+
 ## Project setup
 
 ```
