@@ -1,4 +1,4 @@
-# weight-tracker
+# weight-tracker-vuejs
 
 Just a little demo project using VueJS, Bootstrap, Express and MongoDB
 
